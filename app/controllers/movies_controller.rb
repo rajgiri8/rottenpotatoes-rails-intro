@@ -11,7 +11,14 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.order(params[:sort]).all
+    if(params[:ratings])
+      @cache_rating = params[:ratings]
+      @movies = Movie.order(params[:sort]).where(rating: @cache_rating.keys).all
+    else
+      @movies = Movie.order(params[:sort]).all
+    end
+    @all_ratings = Movie.select(:rating).map(&:rating).uniq
+    #puts params
   end
 
   def new
@@ -20,6 +27,7 @@ class MoviesController < ApplicationController
 
   def create
     @movie = Movie.create!(movie_params)
+
     flash[:notice] = "#{@movie.title} was successfully created."
     redirect_to movies_path
   end

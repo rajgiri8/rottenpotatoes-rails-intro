@@ -22,6 +22,7 @@ class MoviesController < ApplicationController
       retirect = true
     else
       @ratings = Hash[@all_ratings.collect { |item| [item, 1] }]
+      redirect = true
     end
 
      if(params[:sort])

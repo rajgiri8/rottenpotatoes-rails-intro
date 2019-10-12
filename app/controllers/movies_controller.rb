@@ -14,29 +14,33 @@ class MoviesController < ApplicationController
 
     redirect = false
     @all_ratings = Movie.select(:rating).map(&:rating).uniq
-
     if(params[:ratings])
       @ratings = params[:ratings]
     elsif session[:ratings]
       @ratings = session[:ratings]
-      retirect = true
+      redirect = true
     else
       @ratings = Hash[@all_ratings.collect { |item| [item, 1] }]
       redirect = true
     end
 
      if(params[:sort])
+      puts "here"
+      puts params[:sort]
       @sort = params[:sort]
      elsif session[:sort]
+      puts "here1"
+      puts session[:sort]
       @sort = session[:sort]
-      retirect = true
+      redirect = true
     end
 
     if redirect
+      session.clear
       flash.keep 
+      print "heeeeeere"
       redirect_to movies_path(:ratings=>@ratings, :sort=>@sort)
     else
-
       if @ratings
         @movies = Movie.order(@sort).where(rating: @ratings.keys).all
       else

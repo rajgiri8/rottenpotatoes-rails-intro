@@ -11,14 +11,36 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @all_ratings = Movie.select(:rating).map(&:rating).uniq
+    #puts params[:ratings]
+
     if(params[:ratings])
-      @cache_rating = params[:ratings]
-      @movies = Movie.order(params[:sort]).where(rating: @cache_rating.keys).all
+      @ratings = params[:ratings]
+    elsif session[:ratings]
+      @ratings = session[:ratings]
+    else
+      @ratings = Hash[@all_ratings.collect { |item| [item, 1] }]
+    end
+
+     if(params[:sort])
+      @sort = params[:sort]
+    elsif session[:sort]
+      @sort = session[:sort]
+    end
+
+    if @ratings
+      #puts "here"
+      #puts @sort
+      @movies = Movie.order(@sort).where(rating: @ratings.keys).all
     else
       @movies = Movie.order(params[:sort]).all
     end
-    @all_ratings = Movie.select(:rating).map(&:rating).uniq
+    #puts @all_ratings
+    
+    #puts @checked_ratings
     #puts params
+    session[:ratings] = params[:ratings]
+    session[:sort] = params[:sort]
   end
 
   def new

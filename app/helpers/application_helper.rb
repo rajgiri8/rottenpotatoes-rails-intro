@@ -6,4 +6,5 @@ def class_pick(param)
    return nil
  end
 end
+
 end

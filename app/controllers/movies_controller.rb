@@ -25,12 +25,10 @@ class MoviesController < ApplicationController
     end
 
      if(params[:sort])
-      puts "here"
-      puts params[:sort]
+     
       @sort = params[:sort]
      elsif session[:sort]
-      puts "here1"
-      puts session[:sort]
+     
       @sort = session[:sort]
       redirect = true
     end
@@ -38,7 +36,7 @@ class MoviesController < ApplicationController
     if redirect
       session.clear
       flash.keep 
-      print "heeeeeere"
+    
       redirect_to movies_path(:ratings=>@ratings, :sort=>@sort)
     else
       if @ratings

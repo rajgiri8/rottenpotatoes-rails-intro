@@ -13,7 +13,6 @@ class MoviesController < ApplicationController
   def index
     redirect = false
     @all_ratings = Movie.select(:rating).map(&:rating).uniq
-    #puts params[:ratings]
 
     if(params[:ratings])
       @ratings = params[:ratings]
@@ -35,18 +34,17 @@ class MoviesController < ApplicationController
       redirect_to movies_path(:ratings=>@ratings, :sort=>@sort)
     end
     if @ratings
-      #puts "here"
-      #puts @sort
       @movies = Movie.order(@sort).where(rating: @ratings.keys).all
     else
       @movies = Movie.order(params[:sort]).all
     end
-    #puts @all_ratings
-    
-    #puts @checked_ratings
-    #puts params
-    session[:ratings] = params[:ratings]
-    session[:sort] = params[:sort]
+ 
+    if(params[:ratings])
+      session[:ratings] = params[:ratings]
+    end
+    if(params[:sort])
+      session[:sort] = params[:sort]
+    end
   end
 
   def new

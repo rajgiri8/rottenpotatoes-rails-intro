@@ -31,12 +31,12 @@ class MoviesController < ApplicationController
       retirect = true
     end
     if redirect
+      flash.keep 
       redirect_to movies_path(:ratings=>@ratings, :sort=>@sort)
-    end
-    if @ratings
-      @movies = Movie.order(@sort).where(rating: @ratings.keys).all
     else
+      
       @movies = Movie.order(params[:sort]).all
+      
     end
  
     if(params[:ratings])
